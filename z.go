@@ -22,7 +22,7 @@ type factory interface {
 	make(line string) task
 }
 
-func run(f factory) {
+func run(f factory, workers int) {
 	var wg sync.WaitGroup
 
 	in := make(chan task)
@@ -42,7 +42,7 @@ func run(f factory) {
 
 	out := make(chan task)
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < workers; i++ {
 		wg.Add(1)
 		go func() {
 			for t := range in {
@@ -64,5 +64,5 @@ func run(f factory) {
 }
 
 func main() {
-	// run(&myFactory{})
+	// run(&myFactory{}, 500)
 }
